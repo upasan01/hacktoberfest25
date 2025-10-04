@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacktoberfest Quote Generator</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-purple': '#581C87',
+                        'light-purple': '#EDE9FE',
+                    }
+                },
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background: linear-gradient(135deg, #F3E8FF 0%, #D8B4FE 100%);
+        }
+        /* Custom animation for the quote text */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Quote Generator Card -->
+    <div class="w-full max-w-xl bg-white p-8 sm:p-10 rounded-2xl shadow-2xl border-4 border-primary-purple/10 transform transition duration-500 hover:shadow-primary-purple/50">
+        <h1 class="text-3xl font-extrabold text-primary-purple text-center mb-6">
+            Inspiration Generator
+        </h1>
+
+        <!-- Quote Display Area -->
+        <div class="min-h-48 bg-light-purple/70 p-6 rounded-xl flex flex-col justify-center shadow-inner mb-8">
+            <blockquote class="text-gray-800 text-xl italic text-center leading-relaxed">
+                <p id="quote-text" class="fade-in">"The best way to get started is to quit talking and begin doing."</p>
+            </blockquote>
+            <cite id="quote-author" class="text-right mt-4 block text-sm font-semibold text-primary-purple">- Walt Disney</cite>
+        </div>
+
+        <!-- Button -->
+        <div class="flex justify-center">
+            <button id="new-quote-btn" 
+                    class="px-8 py-3 bg-primary-purple text-white font-bold rounded-full text-lg shadow-lg shadow-primary-purple/50 transition duration-300 ease-in-out hover:bg-primary-purple/90 hover:scale-[1.03] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-primary-purple/50">
+                Generate New Quote
+            </button>
+        </div>
+        
+        <p class="mt-8 text-center text-xs text-gray-500">
+            A simple, open-source project perfect for your Hacktoberfest contribution!
+        </p>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+            { text: "Strive not to be a success, but rather to be of value.", author: "Albert Einstein" },
+            { text: "Do one thing every day that scares you.", author: "Eleanor Roosevelt" },
+            { text: "The mind is everything. What you think you become.", author: "Buddha" },
+            { text: "Don't count the days, make the days count.", author: "Muhammad Ali" },
+            { text: "The purpose of our lives is to be happy.", author: "Dalai Lama" },
+            { text: "You miss 100% of the shots you don't take.", author: "Wayne Gretzky" },
+            { text: "Life is what happens when you're busy making other plans.", author: "John Lennon" },
+            { text: "If you are working on something exciting that you really care about, you don't have to be pushed. The vision pulls you.", author: "Steve Jobs" },
+        ];
+
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const newQuoteBtn = document.getElementById('new-quote-btn');
+        let lastIndex = -1;
+
+        /**
+         * Gets a random quote index that is different from the last displayed quote.
+         * @returns {number} The new random index.
+         */
+        function getRandomIndex() {
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * quotes.length);
+            } while (randomIndex === lastIndex);
+            lastIndex = randomIndex;
+            return randomIndex;
+        }
+
+        /**
+         * Displays a new random quote with a small fade-in effect.
+         */
+        function displayNewQuote() {
+            // Remove the fade-in class immediately to prepare for re-adding it
+            quoteText.classList.remove('fade-in');
+            
+            const index = getRandomIndex();
+            const quote = quotes[index];
+
+            // Update text content
+            quoteText.textContent = `"${quote.text}"`;
+            quoteAuthor.textContent = `- ${quote.author}`;
+            
+            // Re-add the fade-in class after a short delay to re-trigger the animation
+            setTimeout(() => {
+                quoteText.classList.add('fade-in');
+            }, 50); 
+        }
+
+        // Initialize with a random quote
+        displayNewQuote(); 
+
+        // Add event listener to the button
+        newQuoteBtn.addEventListener('click', displayNewQuote);
+
+    </script>
+</body>
+</html>
